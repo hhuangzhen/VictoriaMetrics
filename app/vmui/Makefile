@@ -1,7 +1,7 @@
 # All these commands must run from repository root.
 
 vmui-package-base-image:
-	docker build -t vmui-builder-image -f app/vmui/Dockerfile-build ./app/vmui
+	docker build --network host -t vmui-builder-image -f app/vmui/Dockerfile-build ./app/vmui
 
 vmui-build: vmui-package-base-image
 	docker run --rm \
@@ -12,7 +12,7 @@ vmui-build: vmui-package-base-image
          vmui-builder-image -c "npm install && npm run build"
 
 vmui-release: vmui-build
-	docker build -t ${DOCKER_NAMESPACE}/vmui:latest -f app/vmui/Dockerfile-web ./app/vmui/packages/vmui
+	docker build --network host -t ${DOCKER_NAMESPACE}/vmui:latest -f app/vmui/Dockerfile-web ./app/vmui/packages/vmui
 	docker tag ${DOCKER_NAMESPACE}/vmui:latest ${DOCKER_NAMESPACE}/vmui:${PKG_TAG}
 
 vmui-publish-latest: vmui-release

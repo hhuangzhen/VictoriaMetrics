@@ -8,6 +8,7 @@ SNAP_TAG := $(shell echo "$(PKG_TAG)" | cut -b1-31 )
 snap-builder-image:
 	(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -q '$(SNAP_BUILDER_IMAGE)$$') \
 	|| docker build \
+		--network host \
 		--build-arg GO_VERSION=$(GO_VERSION) \
 		--tag $(SNAP_BUILDER_IMAGE) \
 		snap/local

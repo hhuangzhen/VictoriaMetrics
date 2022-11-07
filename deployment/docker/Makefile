@@ -11,6 +11,7 @@ BASE_IMAGE := local/base:1.1.3-$(shell echo $(ROOT_IMAGE) | tr :/ __)-$(shell ec
 package-base:
 	(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -q '$(BASE_IMAGE)$$') \
 		|| docker build \
+			--network host \
 			--build-arg root_image=$(ROOT_IMAGE) \
 			--build-arg certs_image=$(CERTS_IMAGE) \
 			--tag $(BASE_IMAGE) \
@@ -22,6 +23,7 @@ docker-scan: package-base
 package-builder:
 	(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -q '$(BUILDER_IMAGE)$$') \
 		|| docker build \
+			--network host \
 			--build-arg go_builder_image=$(GO_BUILDER_IMAGE) \
 			--tag $(BUILDER_IMAGE) \
 			deployment/docker/builder
@@ -60,6 +62,7 @@ package-via-docker: package-base
 	(docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -q '$(DOCKER_NAMESPACE)/$(APP_NAME):$(PKG_TAG)$(APP_SUFFIX)$(RACE)$$') || (\
 		$(MAKE) app-via-docker && \
 		docker build \
+			--network host \
 			--build-arg src_binary=$(APP_NAME)$(APP_SUFFIX)-prod \
 			--build-arg base_image=$(BASE_IMAGE) \
 			--tag $(DOCKER_NAMESPACE)/$(APP_NAME):$(PKG_TAG)$(APP_SUFFIX)$(RACE) \
@@ -72,6 +75,7 @@ publish-via-docker: \
 	app-via-docker-linux-ppc64le \
 	app-via-docker-linux-386
 	docker buildx build \
+		--network host \
 		--platform=linux/amd64,linux/arm,linux/arm64,linux/ppc64le,linux/386 \
 		--build-arg certs_image=$(CERTS_IMAGE) \
 		--build-arg root_image=$(ROOT_IMAGE) \

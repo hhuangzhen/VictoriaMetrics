@@ -66,10 +66,10 @@ github.com/VictoriaMetrics/fastcache
 github.com/VictoriaMetrics/fasthttp
 github.com/VictoriaMetrics/fasthttp/fasthttputil
 github.com/VictoriaMetrics/fasthttp/stackless
-# github.com/VictoriaMetrics/metrics v1.23.0
+# github.com/VictoriaMetrics/metrics v1.23.0 => github.com/hhuangzhen/metrics v0.0.0-20221029022010-b2edcdcdd1b7
 ## explicit; go 1.15
 github.com/VictoriaMetrics/metrics
-# github.com/VictoriaMetrics/metricsql v0.45.0
+# github.com/VictoriaMetrics/metricsql v0.45.0 => github.com/hhuangzhen/metricsql v0.0.0-20221107130424-62e9cb664ed3
 ## explicit; go 1.13
 github.com/VictoriaMetrics/metricsql
 github.com/VictoriaMetrics/metricsql/binaryop
@@ -569,3 +569,5 @@ google.golang.org/protobuf/types/known/timestamppb
 # gopkg.in/yaml.v2 v2.4.0
 ## explicit; go 1.15
 gopkg.in/yaml.v2
+# github.com/VictoriaMetrics/metrics => github.com/hhuangzhen/metrics v0.0.0-20221029022010-b2edcdcdd1b7
+# github.com/VictoriaMetrics/metricsql => github.com/hhuangzhen/metricsql v0.0.0-20221107130424-62e9cb664ed3

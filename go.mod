@@ -97,3 +97,8 @@ require (
 	google.golang.org/grpc v1.50.1 // indirect
 	google.golang.org/protobuf v1.28.1 // indirect
 )
+
+replace (
+	github.com/VictoriaMetrics/metrics => github.com/hhuangzhen/metrics v0.0.0-20221029022010-b2edcdcdd1b7
+	github.com/VictoriaMetrics/metricsql => github.com/hhuangzhen/metricsql v0.0.0-20221107130424-62e9cb664ed3
+)

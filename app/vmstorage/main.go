@@ -32,7 +32,7 @@ var (
 	precisionBits = flag.Int("precisionBits", 64, "The number of precision bits to store per each value. Lower precision bits improves data compression at the cost of precision loss")
 
 	// DataPath is a path to storage data.
-	DataPath = flag.String("storageDataPath", "victoria-metrics-data", "Path to storage data")
+	DataPath = flag.String("storageDataPath", "/storage", "Path to storage data")
 
 	finalMergeDelay = flag.Duration("finalMergeDelay", 0, "The delay before starting final merge for per-month partition after no new data is ingested into it. "+
 		"Final merge may require additional disk IO and CPU resources. Final merge may increase query speed and reduce disk space usage in some cases. "+
