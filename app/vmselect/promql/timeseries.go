@@ -18,6 +18,7 @@ type timeseries struct {
 	MetricName storage.MetricName
 	Values     []float64
 	Timestamps []int64
+	Matrix     [][]float64
 
 	// Whether the timeseries may be re-used.
 	// Timeseries may be re-used only if their members own values

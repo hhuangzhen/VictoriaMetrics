@@ -39,6 +39,9 @@ var binaryOpFuncs = map[string]binaryOpFunc{
 	"if":      binaryOpIf,
 	"ifnot":   binaryOpIfnot,
 	"default": binaryOpDefault,
+
+	// Matrix ops
+	"|": binaryOpConcat,
 }
 
 func getBinaryOpFunc(op string) binaryOpFunc {
@@ -314,6 +317,37 @@ func resetMetricGroupIfRequired(be *metricsql.BinaryOpExpr, ts *timeseries) {
 		return
 	}
 	ts.MetricName.ResetMetricGroup()
+}
+
+func binaryOpConcat(bfa *binaryOpFuncArg) ([]*timeseries, error) {
+	left := bfa.left
+	right := bfa.right
+	op := bfa.be.Op
+	switch true {
+	case metricsql.IsBinaryOpCmp(op):
+		// Do not remove empty series for comparison operations,
+		// since this may lead to missing result.
+	default:
+		left = removeEmptySeries(left)
+		right = removeEmptySeries(right)
+	}
+	if len(left) == 0 || len(right) == 0 {
+		return nil, nil
+	}
+	left, right, dst, err := adjustBinaryOpTags(bfa.be, left, right)
+	if err != nil {
+		return nil, err
+	}
+	if len(left) != len(right) || len(left) != len(dst) {
+		logger.Panicf("BUG: len(left) must match len(right) and len(dst); got %d vs %d vs %d", len(left), len(right), len(dst))
+	}
+	for i, tsLeft := range left {
+		rightValues := right[i].Values
+		tsLeft.Matrix = append(dst[i].Matrix, rightValues)
+	}
+	// Do not remove time series containing only NaNs, since then the `(foo op bar) default N`
+	// won't work as expected if `(foo op bar)` results to NaN series.
+	return dst, nil
 }
 
 func binaryOpIf(bfa *binaryOpFuncArg) ([]*timeseries, error) {
